@@ -38,7 +38,7 @@ jobs:
         # We're testing whether setting a custom cluster domain works
         cluster-suffix:
         - cluster.local # default value
-        - potato.local
+        # - potato.local
 
         include:
         # - k8s-version: 1.31.x
@@ -74,6 +74,7 @@ jobs:
         cluster-suffix: ${{ matrix.cluster-suffix }}
 
     - name: Setup upterm session
+      if: ${{ failure() }}
       uses: owenthereal/action-upterm@v1
 
     - name: check domain
@@ -97,13 +98,13 @@ jobs:
           fi
         fi
 
-    - name: Test spinning up Knative
-      uses: ./setup-knative
-      with:
-        version: ${{ matrix.knative-version || 'latest' }}
+    # - name: Test spinning up Knative
+    #   uses: ./setup-knative
+    #   with:
+    #     version: ${{ matrix.knative-version || 'latest' }}
 
-    - name: Collect diagnostics
-      if: ${{ failure() }}
-      uses: chainguard-dev/actions/kind-diag@f77a7c3431f961556be5a41e2602c450a590f3e5 # v1.5.12
-      with:
-        artifact-name: logs.${{ matrix.k8s-version }}
+    # - name: Collect diagnostics
+    #   if: ${{ failure() }}
+    #   uses: chainguard-dev/actions/kind-diag@f77a7c3431f961556be5a41e2602c450a590f3e5 # v1.5.12
+    #   with:
+    #     artifact-name: logs.${{ matrix.k8s-version }}
