@@ -65,6 +65,11 @@ jobs:
       with:
         persist-credentials: false
 
+    - name: Configure Docker
+      run: |
+        echo '{"exec-opts":["native.cgroupdriver=systemd"], "storage-driver":"overlay2"}' > /etc/docker/daemon.json
+        systemctl restart docker
+
     - uses: ./whereami # Log where I am.
 
     - name: setup-kind
